@@ -1,17 +1,18 @@
 const express = require('express');
 const mealController = require('./../controllers/mealController');
+const app = require('./../app')
 
-const router = express.Router();
+const mealRouter = express.Router();
 
-router
+mealRouter
     .route('/')
     .get(mealController.getAllMeals)
     .post(mealController.createMeal)
 
-router
-    .route('/:id')
-    .get(mealController.getMeal)
-    .patch(mealController.updateMeal)
-    .delete(mealController.DeleteMeal)
+mealRouter
+  .route('/:id')
+  .get(mealController.getMeal)
+  .patch(mealController.updateMeal)
+  .delete(mealController.DeleteMeal);
 
-module.exports = router;
+module.exports =    mealRouter;

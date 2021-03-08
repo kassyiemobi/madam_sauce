@@ -11,7 +11,7 @@ const mealSchema = new mongoose.Schema({
         type: Number,
         required:[true,'A meal must have a price']
     },
-    rating:{
+    ratings:{
        type:Number
 
     }

@@ -1,13 +1,10 @@
 const express = require('express');
 const app = express()
+const mealRouter = require('./routes/mealRoutes')
 
 
-const PORT = 3000;
 
 
 app.use(express.json());
-app.listen(PORT, () => {
-  console.log(`app running on  port ${PORT}...`);
-});
-
+app.use('/api/v1/meals',mealRouter)
 module.exports = app;
