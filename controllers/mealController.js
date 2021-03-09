@@ -35,7 +35,7 @@ exports.getMeal = catchAsync (async (req, res, next) => {
         const meal = await Meal.findById(req.params.id) 
 
         if(!meal){
-           return next(new AppError('meal not found',4040))
+           return next(new AppError('meal not found',404))
         }
 
         res.status(200).json({
@@ -52,6 +52,10 @@ exports.updateMeal = catchAsync(async (req, res, next) => {
         const meal = await Meal.findByIdAndUpdate(req.params.id,req.body,{
             new:true
         })
+        if (!meal) {
+          return next(new AppError("meal not found", 404));
+        }
+
         res.status(200).json({
             status: 'success',
             data:{
@@ -63,9 +67,13 @@ exports.updateMeal = catchAsync(async (req, res, next) => {
 
 
 exports.DeleteMeal = catchAsync(async (req, res, next ) => {
-    
-       await Meal.findByIdAndDelete(req.params.id);
-      res.status(204).json({
+    const tour = await Meal.findByIdAndDelete(req.params.id);
+
+    if (!meal) {
+      return next(new AppError("meal not found", 404));
+    }
+
+      res.status(200).json({
         status: "success",
         data: null
       });
