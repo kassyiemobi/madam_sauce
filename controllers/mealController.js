@@ -1,28 +1,23 @@
 const Meal = require('../models/mealModel');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync')
+
 
 //create meals using the .create method
-exports.createMeal = async (req , res) => {
-    try{
-        const newMeal = await Meal.create(req.body);
-         res.status(200).json({
-             status:'success',
-             data:{
-                 meal:newMeal
-             }
-            });
-        }catch(err){
-            res.status(400).json({
-                status:'fail',
-                message: err
+exports.createMeal = catchAsync(async (req , res, next) => {
+    const newMeal = await Meal.create(req.body);
+    
+    
+    res.status(200).json({
+         status:'success',
+          data:{
+               meal:newMeal
+            }
             })
-        }
-       
-
-};
+});
 
 //find all the meals by using the .find methos
-exports.getAllMeals = async (req, res) => {
-    try{
+exports.getAllMeals = catchAsync(async (req, res, next) => {
         const meals = await Meal.find();
 
         res.status(200).json({
@@ -33,36 +28,27 @@ exports.getAllMeals = async (req, res) => {
             }
         });
     
-    }catch (err){
-        res.status(404).json({
-            status:'fail',
-            message :err
-        });
-    }
-    
-};
+});
 
 
-exports.getMeal = async (req, res) => {
-    try{
+exports.getMeal = catchAsync (async (req, res, next) => {
         const meal = await Meal.findById(req.params.id) 
+
+        if(!meal){
+           return next(new AppError('meal not found',4040))
+        }
+
         res.status(200).json({
             status: 'success',
             data:{
                 meal
             }
         })
-    }catch(err){
-        res.status(404).json({
-            status:'fail',
-            message :err
-        });
-    }
-};
+   
+});
 
 
-exports.updateMeal = async (req, res) => {
-    try{
+exports.updateMeal = catchAsync(async (req, res, next) => {
         const meal = await Meal.findByIdAndUpdate(req.params.id,req.body,{
             new:true
         })
@@ -72,27 +58,15 @@ exports.updateMeal = async (req, res) => {
                 meal
             }
         })
-    }catch (err){
-        res.status(404).json({
-          status: "fail",
-          message: err,
-        });
-
-    }
-};
+    
+});
 
 
-exports.DeleteMeal = async (req, res) => {
-    try {
+exports.DeleteMeal = catchAsync(async (req, res, next ) => {
+    
        await Meal.findByIdAndDelete(req.params.id);
       res.status(204).json({
         status: "success",
         data: null
       });
-    } catch (err) {
-      res.status(404).json({
-        status: "fail",
-        message: err,
-      });
-    }
-};
+});
