@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { validate } = require('./mealModel');
-
+const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
     firstName :{
         type: String,
@@ -26,6 +26,16 @@ const userSchema = new mongoose.Schema({
     },
     photo: String
 })
+
+userSchema.pre('save',  async function(next){
+    //when saving a new password || if password was not modified
+    if(!this.isModified('password'))return next();
+
+
+    //encrypts password before saving
+    this.password = await bcrypt.hash(this.password,12)
+
+});
 
 const User = mongoose.model('User', userSchema);
 
