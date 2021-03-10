@@ -67,7 +67,7 @@ exports.updateMeal = catchAsync(async (req, res, next) => {
 
 
 exports.DeleteMeal = catchAsync(async (req, res, next ) => {
-    const tour = await Meal.findByIdAndDelete(req.params.id);
+    const meal = await Meal.findByIdAndDelete(req.params.id);
 
     if (!meal) {
       return next(new AppError("meal not found", 404));
