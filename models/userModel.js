@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { validate } = require('./mealModel');
 
 const userSchema = new mongoose.Schema({
     firstName :{
@@ -12,8 +13,7 @@ const userSchema = new mongoose.Schema({
     email :{
         type: String,
         required:[true, 'please enter your email'],
-        lowercase:true,
-        validate:[validator.isEmail,'please provide a valid email']
+        lowercase:true
     },
     phoneNumber:{
         type:Number,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     photo: String
 })
 
-const user = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
 
