@@ -9,7 +9,7 @@ const globalErrorHandler = require ('./controllers/errorController')
 //routes
 app.use(express.json());
 app.use('/api/v1/meals',mealRouter);
-app.use("/api/v1/users", userRouter);
+app.use('/api/v1/users',userRouter);
 
 //this is here because the valid routes have to work first before this works
 app.all ('*', (req,  res, next) => {

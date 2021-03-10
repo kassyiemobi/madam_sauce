@@ -22,20 +22,23 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:[true, 'please provide a password'],
-        minlenght:10
+        minlenght:10,
+        select: false
     },
     photo: String
 })
-
+//encrypting a new password
 userSchema.pre('save',  async function(next){
-    //when saving a new password || if password was not modified
+ //when saving a new password || if password was not modified
     if(!this.isModified('password'))return next();
-
-
-    //encrypts password before saving
+//encrypts password before saving
     this.password = await bcrypt.hash(this.password,12)
 
 });
+//to authenticate login password
+userSchema.methods.correctPassword = function(candidatePassword, userPassword){
+    return bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 

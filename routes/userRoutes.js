@@ -6,12 +6,13 @@ const app = require('./../app')
 const userRouter = express.Router();
 
 userRouter.post('/signup',authController.signup );
+userRouter.post('/login', authController.login);
 
 
 
 userRouter
     .route('/')
-    .get()
+    .get( userController.getAllUsers)
     .post();
     
 userRouter
