@@ -1,12 +1,12 @@
 const express = require('express');
 const mealController = require('./../controllers/mealController');
 const app = require('./../app')
-
+const authController = require('./../controllers/authController')
 const mealRouter = express.Router();
 
 mealRouter
     .route('/')
-    .get(mealController.getAllMeals)
+    .get(authController.protect, mealController.getAllMeals)
     .post(mealController.createMeal)
 
 mealRouter

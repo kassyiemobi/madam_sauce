@@ -8,6 +8,11 @@ const globalErrorHandler = require ('./controllers/errorController')
 
 //routes
 app.use(express.json());
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    console.log(req.headers);
+        next();
+});
 app.use('/api/v1/meals',mealRouter);
 app.use('/api/v1/users',userRouter);
 

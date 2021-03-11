@@ -52,5 +52,23 @@ exports.login = catchAsync(async (req, res, next) => {
   });
 });
 
+//to protect the content for only people who logged in
+exports.protect = catchAsync(async(req, res, next) =>{
+
+//get a token
+let token;
+if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+    token = req.headers.authorization.split('')[1];
+}
+if(!token){
+    return next (new AppError('you are not logged in! Please login to continue', 401))
+}
+    // validate token
 
 
+//check if user exists
+
+//check if user changed password after token was recieved
+
+    next()
+})
