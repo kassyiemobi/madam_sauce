@@ -74,8 +74,5 @@ if(!checkUser){
   return next (new AppError('User no longer exists', 401))
 }
 
-//check if user changed password after token was recieved
-
-
     next()
 })
