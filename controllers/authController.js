@@ -1,3 +1,4 @@
+const { promisify } = require ('util')
 const User = require("./../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -7,7 +8,7 @@ const { config } = require("dotenv");
 config();
 
 const signToken = id => {
-     return jwt.sign({ id: id }, "process.env.JWT_SECRET", {
+     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
        expiresIn: process.env.JWT_EXPIRES_IN,
      });
 
@@ -58,17 +59,23 @@ exports.protect = catchAsync(async(req, res, next) =>{
 //get a token
 let token;
 if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-    token = req.headers.authorization.split('')[1];
+    token = req.headers.authorization.split(' ')[1];
 }
 if(!token){
     return next (new AppError('you are not logged in! Please login to continue', 401))
 }
     // validate token
+const decode = (jwt.verify)(token, process.env.JWT_SECRET);
+console.log(decode)
 
-
-//check if user exists
+//check if user still exists
+const checkUser = await User.findById(decode.id);
+if(!checkUser){
+  return next (new AppError('User no longer exists', 401))
+}
 
 //check if user changed password after token was recieved
+
 
     next()
 })
