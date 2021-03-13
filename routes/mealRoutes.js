@@ -13,6 +13,6 @@ mealRouter
   .route('/:id')
   .get(mealController.getMeal)
   .patch(mealController.updateMeal)
-  .delete(mealController.DeleteMeal);
+  .delete(authController.protect, authController.restrictTo('admin'), mealController.DeleteMeal);
 
 module.exports =    mealRouter;

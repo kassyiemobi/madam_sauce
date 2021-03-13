@@ -20,6 +20,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     password: req.body.password,
+    role: req.body.role
   });
   const token =signToken (newUser._id);
 
@@ -66,13 +67,22 @@ if(!token){
 }
     // validate token
 const decode = (jwt.verify)(token, process.env.JWT_SECRET);
-console.log(decode)
+
 
 //check if user still exists
 const checkUser = await User.findById(decode.id);
 if(!checkUser){
   return next (new AppError('User no longer exists', 401))
 }
-
+  req.user =checkUser;
     next()
 })
+
+exports.restrictTo = (...roles) => {
+  return(req, res, next)=> {
+    if (!roles.includes(req.user.role)){
+      return next(new AppError('you do not have permission to access this', 403));
+    };
+    next();
+  }
+} 

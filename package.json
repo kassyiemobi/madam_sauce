@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "learning node, express and mongoDB by building a simple food delivery service.",
   "main": "server.js",
+  
   "scripts": {
-    "start":"nodemon server.js"
+    "start":"nodemon server.js",
+    "dev": "nodemon -r dotenv/config server.js dotenv_config_path=./.env.dev"
+
   },
   "author": "'omeh kasie'",
   "license": "ISC",
