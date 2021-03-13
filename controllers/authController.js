@@ -77,7 +77,7 @@ if(!checkUser){
   req.user =checkUser;
     next()
 })
-
+// role authorization
 exports.restrictTo = (...roles) => {
   return(req, res, next)=> {
     if (!roles.includes(req.user.role)){
@@ -86,3 +86,20 @@ exports.restrictTo = (...roles) => {
     next();
   }
 } 
+exports.forgotPassword= catchAsync(async(req, res, next) => {
+//get user from email
+const user = await User.findOne( {email: req.body.email});
+if(!user){
+  return next(new AppError('no user with email address', 404));
+}
+
+
+//generate random token
+const resetToken = user.createPasswordResetToken()
+await user.save( {validateBeforeSave : false});
+
+//send it to user email
+})
+exports.resetPassword = (req, res, next) =>{
+
+}
