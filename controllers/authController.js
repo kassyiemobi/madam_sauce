@@ -4,6 +4,7 @@ const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
+const sendEmail = require('./../services/mailerService')
 
 config();
 
@@ -99,6 +100,7 @@ const resetToken = user.createPasswordResetToken()
 await user.save( {validateBeforeSave : false});
 
 //send it to user email
+//cosnt resetURL
 })
 exports.resetPassword = (req, res, next) =>{
 
