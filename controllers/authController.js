@@ -13,6 +13,16 @@ const signToken = (id) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
+const logUserIn = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  res.status(statusCode).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+};
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     firstName: req.body.firstName,
@@ -22,15 +32,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     role: req.body.role,
   });
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: "success",
-    token,
-    data: {
-      newUser,
-    },
-  });
+  logUserIn(newUser,201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -47,11 +49,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("incorrect email or password", 401));
   }
   //if everything is okay, send token to client
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: "success",
-    token,
-  });
+  logUserIn(user,200,res);
 });
 
 //to protect the content for only people who logged in
@@ -153,9 +151,20 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   //update changed password to user
 
   //log the user in
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: "success",
-    token,
-  });
+ logUserIn(user,200,res);
+});
+exports.updatePassword= catchAsync(async(req, res, next) =>{//for logged in user without forgetting password
+// request current password
+const user = await User.findById(req.user.id).Select('+password')
+
+//check if password is correct
+if(!user.correctPassword(req.body.passwordConfirm, user.passwordConfirm)){
+  return next(new AppError('current password is incorrect!', 401));
+}
+//update password
+user.password =req.body.password;
+user.passwordConfirm = req.body.passwordConfirm;
+await user.save();
+//log user in
+logUserIn(user,200,res);
 });
