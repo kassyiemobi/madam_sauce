@@ -34,7 +34,12 @@ const userSchema = new mongoose.Schema({
     },
     passwordResetToken :String,
     passwordResetExpires: Date,
-    photo: String
+    photo: String,
+    active:{           //to delete user
+        type:Boolean,
+        default:true,
+        select:false
+    }
 })
 //encrypting a new password
 userSchema.pre('save',  async function(next){
@@ -69,6 +74,10 @@ userSchema.methods.createPasswordResetToken= function(){
 
     return resetToken;
 }
+//to hide inactive users
+//userSchema.pre(/^find/, functon(next) {
+
+//})
 
 const User = mongoose.model('User', userSchema);
 
