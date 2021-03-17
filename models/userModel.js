@@ -75,9 +75,11 @@ userSchema.methods.createPasswordResetToken= function(){
     return resetToken;
 }
 //to hide inactive users
-//userSchema.pre(/^find/, functon(next) {
+userSchema.pre(/^find/, function(next) {
+    this.find({active:{ $ne : false}});
+    next();
 
-//})
+})
 
 const User = mongoose.model('User', userSchema);
 
