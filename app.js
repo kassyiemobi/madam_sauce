@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
 const rateLimit = require('express-rate-limit');
-
-
+const helmet = require('helmet');
 
 
 
@@ -13,13 +12,21 @@ const globalErrorHandler = require ('./controllers/errorController')
 
 
 //Global middlewares
+//limit requests from same IP
 const limiter =rateLimit({
     max:100,
     windowMs:60* 60* 1000,
     message:'too many request from this IP,please try again in an hour'
 })
 app.use('/api', limiter)
+
+//security HTTP headers
+app.use(helmet())
+
+//body parser.....req.body
 app.use(express.json());
+
+//test middle ware
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     console.log(req.headers);
