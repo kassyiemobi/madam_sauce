@@ -5,16 +5,32 @@ const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
 const sendEmail = require("./../services/mailerService");
+const { truncate } = require("fs");
 
 config();
 
+//this generates a jwt token for sign up
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
+// createtoken and send it to user tio log them in
 const logUserIn = (user, statusCode, res) => {
   const token = signToken(user._id);
+  //browser sends cookie 
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure =true
+  res.cookie ('jwt', token,cookieOptions );
+
+  //remove the password from the output
+  user.password = undefined
+
   res.status(statusCode).json({
     status: "success",
     token,
@@ -78,7 +94,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = checkUser;
   next();
 });
-// role authorization
+// role authorization;to allow certain roles to access a route
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
