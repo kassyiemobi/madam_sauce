@@ -76,7 +76,7 @@ userSchema.methods.createPasswordResetToken= function(){
     return resetToken;
 }
 //to hide inactive users
-userSchema.pre(/^find/, function(next) {
+userSchema.pre(/^find/, function(next) { // the find is a regex that hits every find method
     this.find({active:{ $ne : false}});
     next();
 

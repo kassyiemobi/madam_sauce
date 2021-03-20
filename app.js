@@ -41,9 +41,11 @@ app.use((req, res, next) => {
 //routes
 const mealRouter = require("./routes/mealRoutes");
 const userRouter = require("./routes/userRoutes");
+const reviewRouter = require ('./routes/reviewRoutes')
+
 app.use('/api/v1/meals',mealRouter);
 app.use('/api/v1/users',userRouter);
-
+app.use('/api/v1/reviews',reviewRouter);
 //this is here because the valid routes have to work first before this works
 app.all ('*', (req,  res, next) => {
     next(new AppError(`Cant find ${req.originalUrl}on the server!`,404));
