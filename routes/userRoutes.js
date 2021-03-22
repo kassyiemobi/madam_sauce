@@ -21,7 +21,11 @@ userRouter
     
 userRouter
     .route('/:id')
-    .get()
-    .post();
+    .get(userController.getUser)
+    .patch(userController.updateUser)
+    .delete(userController.DeleteUser);
+
+
+
 
 module.exports = userRouter;

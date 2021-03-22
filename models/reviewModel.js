@@ -40,7 +40,7 @@ reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: "user",
     select: 'firstName lastName photo',
-  });
+  })
 next()
 });
 
