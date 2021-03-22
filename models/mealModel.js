@@ -18,10 +18,23 @@ const mealSchema = new mongoose.Schema({
   image_url: {
     type: String,
    // required: [true, "meal image must be included"],
-  }
-});
+  },
+  
+},
+{
+  toJSON:{ virtuals:true },
+  toObject: { virtuals:true }
+}
+);
+//virtual populate to show the reviews of any meal when the meal is called.
+mealSchema.virtual('reviews',{
+  ref: 'Review', 
+  foreignField: 'meal',
+  localField:'_id'
 
+}//next thing should be to populate here
 
+)
 const Meal = mongoose.model('Meal', mealSchema)
 
 module.exports = Meal;

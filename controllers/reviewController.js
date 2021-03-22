@@ -5,10 +5,6 @@ const AppError = require('./../utils/appError');
 
 exports.createReview = catchAsync(async(req, res, next)=>{
     const newReview = await Review.create(req.body);
-
-    // if(!Review){
-    //     return new AppError('', 400)
-    // };
     res.status(201).json({
         status: 'success',
         data:{
@@ -17,11 +13,10 @@ exports.createReview = catchAsync(async(req, res, next)=>{
     });
 });
 
+
 exports.getAllReviews = catchAsync(async(req, res, next)=>{
-    const reviews = await Review.find();
-    //  if (!Review) {
-    //    return new AppError("", 400);
-    //  }
+    const reviews = await Review.find()
+    console.log(reviews)
      res.status(200).json({
        status: "success",
        result: reviews.length,

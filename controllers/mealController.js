@@ -32,7 +32,7 @@ exports.getAllMeals = catchAsync(async (req, res, next) => {
 
 
 exports.getMeal = catchAsync (async (req, res, next) => {
-        const meal = await Meal.findById(req.params.id) 
+        const meal = await Meal.findById(req.params.id).populate('reviews');//we are populating here because we want to only get reviews when only one meal is called and not all 
 
         if(!meal){
            return next(new AppError('meal not found',404))

@@ -6,7 +6,7 @@ const mealRouter = express.Router();
 
 mealRouter
     .route('/')
-    .get(authController.protect, mealController.getAllMeals)
+    .get( mealController.getAllMeals)
     .post(mealController.createMeal)
 
 mealRouter
