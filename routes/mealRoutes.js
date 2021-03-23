@@ -9,6 +9,7 @@ const reviewRouter = require('./../routes/reviewRoutes');
 //instead of doing the nested route and repeating routes use a middle ware and import same route from review router
 mealRouter.use('/:mealId/reviews', reviewRouter);
 
+
 mealRouter
     .route('/')
     .get( mealController.getAllMeals)

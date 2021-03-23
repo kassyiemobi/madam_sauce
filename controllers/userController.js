@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
+const general = require("./../controllers/generalController");
 
 
 const filterObj =(obj,...allowedFeilds) => {
@@ -24,62 +25,12 @@ exports.create = catchAsync(async (res, req, next) => {
 
 })
 
-exports.getAllUsers = catchAsync (async(req, res, next) => {
-    const users = await User.find();
-    
-    res.status(200).json({
-      status: "success",
-      results: users.length,
-      data: {
-        users,
-      }
-    });
+exports.getAllUsers = general.GetAll(User)
 
-});
-
-exports.getUser = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-
-  if (!user) {
-    return next(new AppError("User not found", 404));
-  }
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      user,
-    },
-  });
-});
-
-exports.updateUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  if (!user) {
-    return next(new AppError("user not found", 404));
-  }
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      user,
-    },
-  });
-});
-
-exports.DeleteUser = catchAsync(async (req, res, next) => {
-  const user = await Meal.findByIdAndDelete(req.params.id);
-
-  if (!user) {
-    return next(new AppError("user not found", 404));
-  }
-
-  res.status(200).json({
-    status: "success",
-    data: null,
-  });
-});
+exports.getUser = general.Get(User);
+// Don not update password with this
+exports.updateUser = general.Update(User)
+exports.DeleteUser = general.Delete(User);
 
 //for user to update self
 exports.updateMe = catchAsync(async(req, res, next)=> {
@@ -103,7 +54,7 @@ exports.updateMe = catchAsync(async(req, res, next)=> {
 
   });
 });
-
+//for user to delete self or deactivate
 exports.deleteMe = catchAsync(async(req, res, next)=>{
   const deleteUser = await User.findByIdAndUpdate(req.user.id,{ active:false})
   res.status(204).json({
