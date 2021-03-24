@@ -32,6 +32,11 @@ exports.getUser = general.Get(User);
 exports.updateUser = general.Update(User)
 exports.DeleteUser = general.Delete(User);
 
+//to get the user without passing any Id in the param
+exports.getMe = (req, res, next) =>{
+  req.params.id = req.user.id;
+  next()
+}
 //for user to update self
 exports.updateMe = catchAsync(async(req, res, next)=> {
   //create error if user post password data
