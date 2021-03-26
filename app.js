@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const rateLimit = require('express-rate-limit');
@@ -5,9 +6,13 @@ const helmet = require('helmet');
 const AppError = require("./utils/appError");
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
+const cors = require('cors')
 
 const globalErrorHandler = require ('./controllers/errorController')
 
+// configuring cors
+
+app.use(cors());
 
 //Global middlewares
 
@@ -39,9 +44,15 @@ app.use((req, res, next) => {
 });
 
 //routes
+
 const mealRouter = require("./routes/mealRoutes");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require ('./routes/reviewRoutes')
+
+app.get('/', (req, res) => {
+    res.status(200).render('base');
+
+})
 
 app.use('/api/v1/meals',mealRouter);
 app.use('/api/v1/users',userRouter);
