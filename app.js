@@ -7,7 +7,7 @@ const AppError = require("./utils/appError");
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const cors = require('cors')
-
+const compression = require('compression')
 const globalErrorHandler = require ('./controllers/errorController')
 
 // configuring cors
@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
     res.status(200).render('base');
 
 })
-
+app.use (compression())
 app.use('/api/v1/meals',mealRouter);
 app.use('/api/v1/users',userRouter);
 app.use('/api/v1/reviews',reviewRouter);
