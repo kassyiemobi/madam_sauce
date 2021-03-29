@@ -1,8 +1,11 @@
+const dotenv = require('dotenv')
 const app = require ('./app')
 const mongoose = require('mongoose');
 
-const PORT = 3000;
+dotenv.config({path: './.env'});
 
+const PORT = process.env.PORT //3000;
+const DB =process.env.DATABASE
 
 const options = {
   useNewUrlParser: true,
@@ -11,7 +14,7 @@ const options = {
   useFindAndModify: false,
 };
 mongoose
-  .connect("mongodb://localhost:27017/madamSaucedatabase", { ...options })
+  .connect(DB, { ...options })
   .then(() => console.log("connected to MongoDB..."))
   .catch((err) => console.error("could not connect to MongoDB..."));
 
