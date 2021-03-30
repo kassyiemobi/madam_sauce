@@ -50,7 +50,7 @@ const userRouter = require("./routes/userRoutes");
 const reviewRouter = require ('./routes/reviewRoutes')
 
 app.get('/', (req, res) => {
-    res.status(200).render('base');
+    res.status(200).send('hello Nigeria my people');
 
 })
 app.use (compression())

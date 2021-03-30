@@ -21,7 +21,7 @@ mongoose
 app.listen(PORT, () => {
   console.log(`app running on  port ${PORT}...`);
 });
-
+app.set("view engine", "handlebars");
 
 
 
